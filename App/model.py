@@ -31,6 +31,7 @@ from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
+import csv
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -39,9 +40,42 @@ los mismos.
 
 # Construccion de modelos
 
+def newCatalog ():
+
+    catalog = {"Sightings": None
+    }
+
+    catalog["Sightings"] = lt.newList("ARRAY_LIST")
+
+    return catalog
+
 # Funciones para agregar informacion al catalogo
+def loadSightings(catalog):
+
+    artworksfiles = cf.data_dir + "UFOS-utf8-small.csv"
+    input_file = csv.DictReader(open(artworksfiles, encoding="utf-8"))
+    for sighting in input_file:
+        addSighting(catalog, sighting)
+
+    prim5ult5 = lt.newList("ARRAY_LIST")
+
+    for i in range(1, lt.size(catalog["Sightings"])+1):
+        sight = lt.getElement(catalog["Sightings"], i)
+        if i < 5:
+            lt.addLast(prim5ult5, sight)
+        elif i>=(lt.size(catalog["Sightings"])-5):
+            lt.addLast(prim5ult5, sight)
+    
+    return prim5ult5
+
+                
+
 
 # Funciones para creacion de datos
+
+def addSighting(catalog, sighting):
+
+    lt.addLast(catalog["Sightings"], sighting)
 
 # Funciones de consulta
 
