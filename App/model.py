@@ -30,6 +30,7 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.DataStructures import orderedmapstructure as om
 assert cf
 import csv
 
@@ -42,10 +43,16 @@ los mismos.
 
 def newCatalog ():
 
-    catalog = {"Sightings": None
+    catalog = {"Sightings": None,
+                "city": None
     }
 
     catalog["Sightings"] = lt.newList("ARRAY_LIST")
+
+    catalog["city"] = om.newMap(omaptype="RBT",
+                                comparefunction=compareCity
+
+    )
 
     return catalog
 
@@ -77,8 +84,61 @@ def addSighting(catalog, sighting):
 
     lt.addLast(catalog["Sightings"], sighting)
 
+def updateCityIndex(map, sighting):
+
+    cityoccured = sighting["city"] 
+    entry = om.get(map, cityoccured)
+
+    if entry is None:
+
+        cityEntry = newDataEntry(sighting)
+        om.put(map, cityoccured, cityEntry)
+
+    else: 
+        cityEntry = me.getValue(entry)
+    
+    return map
+
+def newDataEntry(sighting):
+
+    entry = {"sightingIndex": None, "lstSighting":None}
+
+    entry["sightingIndex"] = mp.newMap(numelements=30,
+                                        maptype="PROBING",
+                                        comparefunction=compareDates)
+    entry["lstSighting"] = lt.newList("ARRAY_LIST")
+
+    return entry
+
+def addCityIndex(cityEntry, sighting):
+
+    lstentry = cityEntry["lstSighting"]
+    lt.addLast(lstentry, sighting)
+    
+
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def compareCity(city1, city2):
+
+    city = me.getKey(city2)
+    if (city1 == city):
+        return 0
+    elif (city1 > city):
+        return 1
+    else:
+        return -1
+
+def compareDates(date1, date2):
+    """
+    Compara dos fechas
+    """
+    if (date1 == date2):
+        return 0
+    elif (date1 > date2):
+        return 1
+    else:
+        return -1
 # Funciones de ordenamiento
+
