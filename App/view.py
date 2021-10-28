@@ -36,12 +36,14 @@ operación solicitada
 
 def printMenu():
     print("Bienvenido")
-    print("1- Contar avistamientos en una ciudad")
-    print("2- Contar avistamientos por duracion")
-    print("3- Contar Avistamientos por Hora/Minutos al dia")
-    print("4- Contar avistaientos en rango de fecha")
-    print("5- Contar avistamientos de una Zona Geografica")
-    print("3- Contar Avistamientos por Hora/Minutos al dia")
+    print("0- Inicializar catalogo")
+    print("1- Inicializar catalogo")
+    print("2- Contar avistamientos en una ciudad")
+    print("3- Contar avistamientos por duracion")
+    print("4- Contar Avistamientos por Hora/Minutos al dia")
+    print("5- Contar avistaientos en rango de fecha")
+    print("6- Contar avistamientos de una Zona Geografica")
+    print("7- Contar Avistamientos por Hora/Minutos al dia")
 
 def initCatalog():
 
@@ -59,19 +61,14 @@ Menu principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-    if int(inputs[0]) == 1:
+    if int(inputs[0]) == 0:
         print("Cargando información de los archivos ....")
         
         catalog = initCatalog()
 
-        resultado = loadSightings(catalog)
 
-        for a in resultado["elements"]:
-            print (a)
-
-
-    elif int(inputs[0]) == 2:
-        pass
+    elif int(inputs[0]) == 1:
+        controller.loadSightings(catalog)
 
     else:
         sys.exit(0)

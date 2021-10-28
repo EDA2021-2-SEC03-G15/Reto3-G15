@@ -75,46 +75,20 @@ def loadSightings(catalog):
     
     return prim5ult5
 
-                
-
-
 # Funciones para creacion de datos
 
 def addSighting(catalog, sighting):
 
     lt.addLast(catalog["Sightings"], sighting)
 
-def updateCityIndex(map, sighting):
+def newCityRBT(sighting):
 
-    cityoccured = sighting["city"] 
-    entry = om.get(map, cityoccured)
+    dateIndex = om.newMap(omaptype="RBT",
+                            comparefunction=compareCity
+                        
+    )
+    return dateIndex
 
-    if entry is None:
-
-        cityEntry = newDataEntry(sighting)
-        om.put(map, cityoccured, cityEntry)
-
-    else: 
-        cityEntry = me.getValue(entry)
-    
-    return map
-
-def newDataEntry(sighting):
-
-    entry = {"sightingIndex": None, "lstSighting":None}
-
-    entry["sightingIndex"] = mp.newMap(numelements=30,
-                                        maptype="PROBING",
-                                        comparefunction=compareDates)
-    entry["lstSighting"] = lt.newList("ARRAY_LIST")
-
-    return entry
-
-def addCityIndex(cityEntry, sighting):
-
-    lstentry = cityEntry["lstSighting"]
-    lt.addLast(lstentry, sighting)
-    
 
 # Funciones de consulta
 
