@@ -77,6 +77,7 @@ def loadSightings(catalog):
 
 # Funciones para creacion de datos
 
+
 def addSighting(catalog, sighting):
 
     lt.addLast(catalog["Sightings"], sighting)
