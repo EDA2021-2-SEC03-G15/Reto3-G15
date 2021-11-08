@@ -37,13 +37,12 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("0- Inicializar catalogo")
-    print("1- Inicializar catalogo")
-    print("2- Contar avistamientos en una ciudad")
-    print("3- Contar avistamientos por duracion")
-    print("4- Contar Avistamientos por Hora/Minutos al dia")
-    print("5- Contar avistaientos en rango de fecha")
-    print("6- Contar avistamientos de una Zona Geografica")
-    print("7- Contar Avistamientos por Hora/Minutos al dia")
+    print("1- Contar avistamientos en una ciudad")
+    print("2- Contar avistamientos por duracion")
+    print("3- Contar Avistamientos por Hora/Minutos al dia")
+    print("4- Contar avistaientos en rango de fecha")
+    print("5- Contar avistamientos de una Zona Geografica")
+    print("6- Contar Avistamientos por Hora/Minutos al dia")
 
 def initCatalog():
 
@@ -66,9 +65,17 @@ while True:
         
         catalog = initCatalog()
 
+        x = controller.loadSightings(catalog)
+        print("Avistamientos cargados correctamente")
+        print("''''''''''''''''''''''''''''''''''''''''''")
+        print("Los primeros y ultimos 5 avistamientos son:")
+        print("\n")
+        for i in x['elements']:
+            print(i)
 
     elif int(inputs[0]) == 1:
-        controller.loadSightings(catalog)
+        x = 1
+        print(x)
 
     else:
         sys.exit(0)
