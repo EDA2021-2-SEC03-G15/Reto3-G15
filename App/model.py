@@ -31,6 +31,7 @@ from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.DataStructures import orderedmapstructure as om
+import datetime
 assert cf
 import csv
 
@@ -44,12 +45,11 @@ los mismos.
 def newCatalog ():
 
     catalog = {"Sightings": None,
-                "city": None
+                "CityIndex": None
     }
 
     catalog["Sightings"] = lt.newList("ARRAY_LIST")
-
-    catalog["city"] = om.newMap(omaptype="RBT",
+    catalog["CityIndex"] = om.newMap(omaptype="RBT",
                                 comparefunction=compareCity
 
     )
@@ -64,34 +64,98 @@ def loadSightings(catalog):
     for sighting in input_file:
         addSighting(catalog, sighting)
 
-    prim5ult5 = lt.newList("ARRAY_LIST")
-
-    for i in range(1, lt.size(catalog["Sightings"])+1):
-        sight = lt.getElement(catalog["Sightings"], i)
-        if i < 5:
-            lt.addLast(prim5ult5, sight)
-        elif i>=(lt.size(catalog["Sightings"])-5):
-            lt.addLast(prim5ult5, sight)
-    
-    return prim5ult5
+    return catalog
 
 # Funciones para creacion de datos
 
 
 def addSighting(catalog, sighting):
-
+    
     lt.addLast(catalog["Sightings"], sighting)
+    updateCitySighting(catalog["CityIndex"], sighting)
+    return catalog
 
-def newCityRBT(sighting):
 
-    dateIndex = om.newMap(omaptype="RBT",
-                            comparefunction=compareCity
-                        
-    )
-    return dateIndex
+def updateCitySighting(map, sighting):
+
+
+    sightingCity = sighting['city']
+
+    entry = om.get(map, sightingCity)
+    if entry is None:
+        datentry = newDataEntry(sighting)
+        om.put(map, sightingCity, datentry)
+    else:
+        datentry = me.getValue(entry)
+    addCityIndex(datentry, sighting)
+    return map
+
+def addCityIndex(datentry, sighting):
+
+
+    lst = datentry['lstsighting']
+    lt.addLast(lst, sighting)
+    cityIndex = datentry['CityIndex']
+    cityentry = mp.get(cityIndex, sighting['city'])
+    if (cityentry is None):
+        entry = newCityEntry(sighting['city'], sighting)
+        lt.addLast(entry['lstcities'], sighting)
+        mp.put(cityIndex, sighting['city'], entry)
+    else:
+        entry = me.getValue(cityentry)
+        lt.addLast(entry['lstcities'], sighting)
+    return datentry
+
+def newDataEntry(sighting):
+    """
+    Crea una entrada en el indice por fechas, es decir en el arbol
+    binario.
+    """
+    entry = {'CityIndex': None, 'lstsighting': None}
+    entry['CityIndex'] = mp.newMap(numelements=30,
+                                     maptype='PROBING',
+                                     comparefunction=compareCity)
+    entry['lstsighting'] = lt.newList('SINGLE_LINKED', compareCity)
+    return entry
+
+def newCityEntry(citygrp, sighting):
+    """
+    Crea una entrada en el indice por ciudad, es decir en
+    la tabla de hash, que se encuentra en cada nodo del arbol.
+    """
+    cityentry = {'city': None, 'lstcities': None}
+    cityentry['city'] = citygrp
+    cityentry['lstcities'] = lt.newList('SINGLELINKED', compareCity)
+    return cityentry
 
 
 # Funciones de consulta
+
+def sightingSize(catalog):
+    return lt.size(catalog['Sightings'])
+
+def indexHeight(catalog):
+    return om.height(catalog['CityIndex'])
+
+def indexSize(catalog):
+    return om.size(catalog['CityIndex'])
+
+def minKey(catalog):
+    return om.minKey(catalog['CityIndex']) 
+
+def maxKey(catalog):
+    return om.maxKey(catalog['CityIndex'])
+
+
+def getSightingsByCity(catalog, city):
+
+    sighdate = om.get(catalog['CityIndex'], city)
+    if sighdate['key'] is not None:
+        citymap = me.getValue(sighdate)['cityIndex']
+        numcities = mp.get(citymap, city)
+        if numcities is not None:
+            return mp.size(me.getValue(numcities)['lstcities'])
+    return 0  
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

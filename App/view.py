@@ -60,23 +60,40 @@ Menu principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
+
     if int(inputs[0]) == 0:
         print("Cargando información de los archivos ....")
         
         catalog = initCatalog()
 
-        x = controller.loadSightings(catalog)
+        controller.loadSightings(catalog)
+
+        x = catalog["Sightings"]
+
         print("Avistamientos cargados correctamente")
         print("''''''''''''''''''''''''''''''''''''''''''")
-        print("Los primeros y ultimos 5 avistamientos son:")
-        print("\n")
-        for i in x['elements']:
-            print(i)
+        sizeSight = len(x["elements"])
+
+        for i in range(sizeSight):
+            if i < 5:
+                print("--------------------------------------------------------")
+                print (x["elements"][i])     
+        print("********************************************************")      
+        for i in range (sizeSight-5, sizeSight):
+            if i <= sizeSight:
+                print("--------------------------------------------------------")
+                print(x["elements"][i])
+    
+
+
 
     elif int(inputs[0]) == 1:
-        x = 1
-        print(x)
-
+        print("\nBuscando avistamientos de x ciudad: ")
+        city = input("Ciudad: ")
+        numcities = controller.getSightingsByCity(catalog,
+                                                      city)
+        print("\nTotal de avistamientos en: " + city + " es:  " +
+              str(numcities))
     else:
         sys.exit(0)
 sys.exit(0)

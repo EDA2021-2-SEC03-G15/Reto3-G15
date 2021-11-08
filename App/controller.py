@@ -23,6 +23,7 @@
 import config as cf
 import model
 import csv
+import datetime
 
 
 """
@@ -44,3 +45,32 @@ def loadSightings(catalog):
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+
+def sightingSize(catalog):
+    return model.sightingsSize(catalog)
+
+
+def indexHeight(catalog):
+    return model.indexHeight(catalog)
+
+
+def indexSize(catalog):
+    return model.indexSize(catalog)
+
+
+def minKey(catalog):
+    return model.minKey(catalog)
+
+
+def maxKey(catalog):
+    return model.maxKey(catalog)
+
+
+def getSightingsByRange(catalog, initialDate, finalDate):
+    initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
+    finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
+    return model.getSightingsByRange(catalog, initialDate.date(), finalDate.date())
+
+
+def getSightingsByCity(analyzer, city):
+    return model.getSightingsByCity(analyzer, city)
