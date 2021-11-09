@@ -24,6 +24,7 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+from DISClib.ADT import map as mp
 assert cf
 
 
@@ -53,6 +54,10 @@ def loadSightings(catalog):
     resultado = controller.loadSightings(catalog)
 
     return resultado
+
+def getSightingsByCity(catalog, city):
+
+    return controller.getSightingsByCity(catalog, city)
 
 """
 Menu principal
@@ -85,13 +90,11 @@ while True:
                 print(x["elements"][i])
     
 
-
-
     elif int(inputs[0]) == 1:
         print("\nBuscando avistamientos de x ciudad: ")
         city = input("Ciudad: ")
-        numcities = controller.getSightingsByCity(catalog,
-                                                      city)
+        numcities = getSightingsByCity(catalog,
+                                        city)
         print("\nTotal de avistamientos en: " + city + " es:  " +
               str(numcities))
     else:

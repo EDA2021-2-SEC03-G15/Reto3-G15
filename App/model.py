@@ -151,23 +151,32 @@ def getSightingsByCity(catalog, city):
 
     sighdate = om.get(catalog['CityIndex'], city)
     if sighdate['key'] is not None:
-        citymap = me.getValue(sighdate)['cityIndex']
+        citymap = me.getValue(sighdate)['CityIndex']
         numcities = mp.get(citymap, city)
         if numcities is not None:
             return mp.size(me.getValue(numcities)['lstcities'])
+    
     return 0  
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compareCity(city1, city2):
 
-    city = me.getKey(city2)
-    if (city1 == city):
-        return 0
-    elif (city1 > city):
-        return 1
+    if type(city2)!=dict:
+        if (city1 == city2):
+            return 0
+        elif (city1 > city2):
+            return 1
+        else:
+            return -1
     else:
-        return -1
+        if (city1 == city2["key"]):
+            return 0
+        elif (city1 > city2["key"]):
+            return 1
+        else:
+            return -1
+
 
 def compareDates(date1, date2):
     """
