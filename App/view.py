@@ -21,82 +21,248 @@
  """
 
 import config as cf
-import sys
 import controller
 from DISClib.ADT import list as lt
-from DISClib.ADT import map as mp
 assert cf
 
+def citiesBySightings(catalog):
+    city = input('Ingresa la ciudad: ')
 
-"""
-La vista se encarga de la interacción con el usuario
-Presenta el menu de opciones y por cada seleccion
-se hace la solicitud al controlador para ejecutar la
-operación solicitada
-"""
+    info = controller.sightingByCity(catalog, city)
+
+    print('Hay', lt.size(info[1]), 'ciudades con avistamientos reportados')
+    print('El top 5 es:')
+    print('\n')
+
+    for city in lt.iterator(lt.subList(info[1], 1, 5)):
+        print(city['city'], ':', lt.size(city['sightings']))
+    
+    print('\nHay', lt.size(info[0]['sightings']), 'avistamientos en la ciudad seleccionada.')
+    print('Los primeros 3 y ultimos 3 avistamientos en la ciudad son: ')
+
+    for sighting in lt.iterator(lt.subList(info[0]['sightings'], 1, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        
+    for sighting in lt.iterator(lt.subList(info[0]['sightings'], lt.size(info[0]['sightings']) - 2, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+
+
+def sightingsInDurationRange(catalog):
+    minTime = input('Ingresa el tiempo minimo: ')
+    maxTime = input('Ingresa el tiempo máximo: ')
+
+    info = controller.sightingsByDurationRange(catalog, minTime, maxTime)
+
+    print('Hay', lt.size(info[0]), 'diferentes duraciones.')
+    print('El top 5 es:')
+    print('\n')
+
+    top5 = lt.subList(info[0], lt.size(info[0]) - 4, 5)
+    
+    sorted = controller.sortBySize(top5)
+
+    for duration in lt.iterator(sorted):
+        print(duration['duration'], ':', lt.size(duration['sightings']))
+    
+    print('\nHay', lt.size(info[1]), 'avistamientos en el rango seleccionado.')
+    print('Los primeros 3 y ultimos 3 avistamientos en el rango son: ')
+
+    for sighting in lt.iterator(lt.subList(info[1], 1, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        
+    for sighting in lt.iterator(lt.subList(info[1], lt.size(info[1]) - 2, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+
+
+def sightingsInTimeRange(catalog):
+    minTime = input('Ingresa la hora minima: ')
+    maxTime = input('Ingresa la hora máxima: ')
+
+    info = controller.sightingsByTimeRange(catalog, minTime, maxTime)
+
+    print('Hay', lt.size(info[0]), 'diferentes horas.')
+    print('El top 5 más tardio es:')
+    print('\n')
+
+    top5 = lt.subList(info[0], lt.size(info[0]) - 4, 5)
+    
+    sorted = controller.sortByLate(top5)
+
+    for duration in lt.iterator(sorted):
+        print(duration['time'], ':', lt.size(duration['sightings']))
+    
+    print('\nHay', lt.size(info[1]), 'avistamientos en el rango seleccionado.')
+    print('Los primeros 3 y ultimos 3 avistamientos en el rango son: ')
+
+    for sighting in lt.iterator(lt.subList(info[1], 1, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        
+    for sighting in lt.iterator(lt.subList(info[1], lt.size(info[1]) - 2, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+
+
+def sightingsInDateRange(catalog):
+    minTime = input('Ingresa la fecha minima: ')
+    maxTime = input('Ingresa la fecha máxima: ')
+
+    info = controller.sightingsByDateRange(catalog, minTime, maxTime)
+
+    print('Hay', lt.size(info[0]), 'diferentes fechas.')
+    print('El top 5 más antiguo es:')
+    print('\n')
+
+    top5 = lt.subList(info[0], 1, 5)
+    
+    sorted = controller.sortByDate(top5)
+
+    for duration in lt.iterator(sorted):
+        print(duration['date'], ':', lt.size(duration['sightings']))
+    
+    print('\nHay', lt.size(info[1]), 'avistamientos en el rango seleccionado.')
+    print('Los primeros 3 y ultimos 3 avistamientos en el rango son: ')
+
+    for sighting in lt.iterator(lt.subList(info[1], 1, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        
+    for sighting in lt.iterator(lt.subList(info[1], lt.size(info[1]) - 2, 3)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+
+
+def sightingsInCoordinateRange(catalog):
+    minLatitude = input('Ingresa la latitud minima: ')
+    maxLatitude = input('Ingresa la latitud maxima: ')
+    minLongitude = input('Ingresa la longitud minima: ')
+    maxLongitude = input('Ingresa la longitud maxima: ')
+
+    info = controller.sightingsByCoordinateRange(catalog, minLatitude, maxLatitude, minLongitude, maxLongitude, True)
+
+    print('Hay', lt.size(info), 'diferentes avistamientos en el area indicada.')
+    print('\n')
+
+    for sighting in lt.iterator(lt.subList(info, 1, 5)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        print('Latitud:', sighting['latitude'])
+        print('Longitud:', sighting['longitude'])
+        
+    for sighting in lt.iterator(lt.subList(info, lt.size(info) - 4, 5)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        print('Latitud:', sighting['latitude'])
+        print('Longitud:', sighting['longitude'])
+
+
+def sightingsMapInCoordinateRange(catalog):
+    minLatitude = input('Ingresa la latitud minima: ')
+    maxLatitude = input('Ingresa la latitud maxima: ')
+    minLongitude = input('Ingresa la longitud minima: ')
+    maxLongitude = input('Ingresa la longitud maxima: ')
+
+    info = controller.sightingsByCoordinateRange(catalog, minLatitude, maxLatitude, minLongitude, maxLongitude, False)
+
+    print('Hay', lt.size(info), 'diferentes avistamientos en el area indicada.')
+    print('\n')
+
+    for sighting in lt.iterator(lt.subList(info, 1, 5)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        print('Latitud:', sighting['latitude'])
+        print('Longitud:', sighting['longitude'])
+        
+    for sighting in lt.iterator(lt.subList(info, lt.size(info) - 4, 5)):
+        print('\nFecha y hora:', sighting['datetime'])
+        print('Ciudad:', sighting['city'])
+        print('Estado:', sighting['state'])
+        print('País:', sighting['country'])
+        print('Duración(s):', sighting['duration (seconds)'])
+        print('Forma:', sighting['shape'])
+        print('Latitud:', sighting['latitude'])
+        print('Longitud:', sighting['longitude'])
+
 
 def printMenu():
     print("Bienvenido")
-    print("0- Inicializar catalogo")
-    print("1- Contar avistamientos en una ciudad")
-    print("2- Contar avistamientos por duracion")
-    print("3- Contar Avistamientos por Hora/Minutos al dia")
-    print("4- Contar avistaientos en rango de fecha")
-    print("5- Contar avistamientos de una Zona Geografica")
-    print("6- Contar Avistamientos por Hora/Minutos al dia")
+    print("1- Cargar información en el catálogo")
+    print("2- Contar los avistamientos en una ciudad")
+    print("3- Contar los avistamientos por duración")
+    print("4- Contar avistamientos por Hora/Minutos del día")
+    print("5- Contar los avistamientos en un rango de fechas")
+    print("6- Contar los avistamientos de una Zona Geográfica")
+    print("7- Visualizar los avistamientos de una zona geográfica.")
+    print("8- Salir")
 
-def initCatalog():
+catalog = None
 
-    return controller.initCatalog()
-
-def loadSightings(catalog):
-
-    resultado = controller.loadSightings(catalog)
-
-    return resultado
-
-def getSightingsByCity(catalog, city):
-
-    return controller.getSightingsByCity(catalog, city)
-
-"""
-Menu principal
-"""
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-
-    if int(inputs[0]) == 0:
+    if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-        
-        catalog = initCatalog()
-
-        controller.loadSightings(catalog)
-
-        x = catalog["Sightings"]
-
-        print("Avistamientos cargados correctamente")
-        print("''''''''''''''''''''''''''''''''''''''''''")
-        sizeSight = len(x["elements"])
-
-        for i in range(sizeSight):
-            if i < 5:
-                print("--------------------------------------------------------")
-                print (x["elements"][i])     
-        print("********************************************************")      
-        for i in range (sizeSight-5, sizeSight):
-            if i <= sizeSight:
-                print("--------------------------------------------------------")
-                print(x["elements"][i])
-    
-
-    elif int(inputs[0]) == 1:
-        print("\nBuscando avistamientos de x ciudad: ")
-        city = input("Ciudad: ")
-        numcities = getSightingsByCity(catalog,
-                                        city)
-        print("\nTotal de avistamientos en: " + city + " es:  " +
-              str(numcities))
+        catalog = controller.initCatalog()
+        catalog = controller.loadData(catalog, input('Ingresa el nombre del archivo que contiene la información: '))
+    elif int(inputs[0]) == 2:
+        citiesBySightings(catalog)
+    elif int(inputs[0]) == 3:
+        sightingsInDurationRange(catalog)
+    elif int(inputs[0]) == 4:
+        sightingsInTimeRange(catalog)
+    elif int(inputs[0]) == 5:
+        sightingsInDateRange(catalog)
+    elif int(inputs[0]) == 6:
+        sightingsInCoordinateRange(catalog)
+    elif int(inputs[0]) == 7:
+        sightingsMapInCoordinateRange(catalog)
     else:
-        sys.exit(0)
-sys.exit(0)
+        break
