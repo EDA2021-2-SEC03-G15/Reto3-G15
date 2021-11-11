@@ -65,6 +65,9 @@ def newSighting(catalog, sighting):
   addByCity(catalog, sighting)
   addByDate(catalog, sighting)
   addByCoordinates(catalog, sighting)
+  addByDuration(catalog, sighting)
+  addByTime(catalog, sighting)
+
 
 # Funciones para creacion de datos
 
@@ -83,7 +86,33 @@ def addByCity(catalog, sighting):
     lt.addLast(citiesLst['sightings'], sighting)
 
 
+def addByDuration(catalog, sighting):
+  existingDuration = om.get(catalog['duration'], float(sighting['duration (seconds)']))
 
+  if existingDuration is None:
+    duration = lt.newList()
+    lt.addLast(duration, sighting)
+    om.put(catalog['duration'], float(sighting['duration (seconds)']), {
+      'duration': float(sighting['duration (seconds)']),
+      'sightings': duration,
+    })
+  else:
+    duration = me.getValue(existingDuration)
+    lt.addLast(duration['sightings'], sighting)
+
+def addByTime(catalog, sighting):
+  existingTime = om.get(catalog['time'], datetime.strptime(sighting['datetime'], '%Y-%m-%d %H:%M:%S').time())
+
+  if existingTime is None:
+    timeLst = lt.newList()
+    lt.addLast(timeLst, sighting)
+    om.put(catalog['time'], datetime.strptime(sighting['datetime'], '%Y-%m-%d %H:%M:%S').time(), {
+      'time': sighting['datetime'].split(' ')[1],
+      'sightings': timeLst,
+    })
+  else:
+    timeLst = me.getValue(existingTime)
+    lt.addLast(timeLst['sightings'], sighting)
 
 
 def addByDate(catalog, sighting):
