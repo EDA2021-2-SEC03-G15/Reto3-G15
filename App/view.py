@@ -23,13 +23,17 @@
 import config as cf
 import controller
 from DISClib.ADT import list as lt
+import time
 assert cf
 
 def citiesBySightings(catalog):
     city = input('Ingresa la ciudad: ')
 
+    start = time.process_time()
     info = controller.sightingByCity(catalog, city)
-
+    stop = time.process_time()
+    elapsed_time = (stop - start)*1000
+    print(elapsed_time)
     print('Hay', lt.size(info[1]), 'ciudades con avistamientos reportados')
     print('El top 5 es:')
     print('\n')
