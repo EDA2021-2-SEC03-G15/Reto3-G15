@@ -31,6 +31,7 @@ from DISClib.ADT import orderedmap as om
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+import time
 assert cf
 
 """
@@ -64,6 +65,7 @@ def createCatalog():
 def newSighting(catalog, sighting):
   addByCity(catalog, sighting)
   addByDate(catalog, sighting)
+  addByTime(catalog, sighting)
   addByCoordinates(catalog, sighting)
 
 # Funciones para creacion de datos
@@ -83,9 +85,19 @@ def addByCity(catalog, sighting):
     citiesLst = me.getValue(existingCity)
     lt.addLast(citiesLst['sightings'], sighting)
 
+def addByTime(catalog, sighting):
+  existingTime = om.get(catalog['time'], datetime.strptime(sighting['datetime'], '%Y-%m-%d %H:%M:%S').time())
 
-
-
+  if existingTime is None:
+    timeLst = lt.newList()
+    lt.addLast(timeLst, sighting)
+    om.put(catalog['time'], datetime.strptime(sighting['datetime'], '%Y-%m-%d %H:%M:%S').time(), {
+      'time': sighting['datetime'].split(' ')[1],
+      'sightings': timeLst,
+    })
+  else:
+    timeLst = me.getValue(existingTime)
+    lt.addLast(timeLst['sightings'], sighting)
 
 def addByDate(catalog, sighting):
   existingDate = om.get(catalog['date'], datetime.strptime(sighting['datetime'], '%Y-%m-%d %H:%M:%S').date())
