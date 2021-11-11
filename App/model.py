@@ -71,6 +71,7 @@ def newSighting(catalog, sighting):
 def addByCity(catalog, sighting):
   existingCity = om.get(catalog['cities'], sighting['city'])
 
+
   if existingCity is None:
     citiesLst = lt.newList()
     lt.addLast(citiesLst, sighting)
